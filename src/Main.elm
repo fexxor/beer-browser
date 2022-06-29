@@ -90,13 +90,12 @@ update msg model =
                 newModel =
                     { model | pageIndex = minimumPageIndex }
             in
-            (-- TODO: Debounce
-             if (String.trim >> String.isEmpty) searchQuery then
+            if (String.trim >> String.isEmpty) searchQuery then
                 ( { newModel | queryString = searchQuery, queryResult = QueryNotSent }, Cmd.none )
 
-             else
+            else
+                -- TODO: Debounce and set queryResult to loading. Right now it's a better experience to not have it flickering.
                 ( { newModel | queryString = searchQuery }, getBeerQuery searchQuery model.pageIndex )
-            )
 
         GotBeerQueryResult result ->
             case result of
@@ -124,7 +123,7 @@ update msg model =
                 newPageIndex =
                     model.pageIndex + 1
             in
-            ( { model | pageIndex = newPageIndex }, getBeerQuery model.queryString newPageIndex )
+            ( { model | pageIndex = newPageIndex, queryResult = Loading }, getBeerQuery model.queryString newPageIndex )
 
         PreviousPageButtonClicked ->
             let
@@ -135,7 +134,7 @@ update msg model =
                     else
                         model.pageIndex - 1
             in
-            ( { model | pageIndex = newPageIndex }, getBeerQuery model.queryString newPageIndex )
+            ( { model | pageIndex = newPageIndex, queryResult = Loading }, getBeerQuery model.queryString newPageIndex )
 
 
 getBeerQuery : String -> Int -> Cmd Msg
@@ -211,6 +210,7 @@ view model =
                         Element.none
 
                     Loading ->
+                        -- TODO: Better loading experience.
                         Element.text "Loading..."
 
                     Success beerList ->
