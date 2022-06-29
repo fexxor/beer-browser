@@ -1,0 +1,19 @@
+{
+  "name": "beer-browser",
+  "version": "1.0.0",
+  "description": "Elm application that allows the user to explore the Brewdog beer catalogue.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "elm-app start",
+    "test": "elm-app test",
+    "build": "elm-app build"
+  },
+  "author": "fexxor",
+  "license": "ISC",
+  "dependencies": {
+    "create-elm-app": "^5.22.0"
+  }
+}
